@@ -92,4 +92,9 @@ lune run tests/Version.spec.luau  # Run tests
 
 This captures everything: code + world state (parts, terrain, lighting).
 
+**Pre-commit hook enforces this:**
+- Queries `updateTime` from Roblox via rbxcloud
+- Blocks commit if latest publish isn't logged in `PUBLISH_LOG.yml`
+- Shows the `updateTime` to add when blocked
+
 **Why not rbxcloud for publishing?** rbxcloud publishes a `.rbxl` file built from filesystem only. It does NOT capture world state (parts, terrain, lighting) created via MCP or Studio. Only Studio publish gets both code + world.
