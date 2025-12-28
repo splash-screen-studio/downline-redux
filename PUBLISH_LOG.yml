@@ -2,8 +2,18 @@
 # After publishing from Studio, add entry here and commit
 
 versions:
-  - version: 5
+  - version: 6
     tag: base
+    date: 2025-12-28
+    commit: dc4fdf1
+    subsystems:
+      client: 1.0.0
+      server: 1.0.0
+      shared: 1.0.0
+      ReplicatedFirst: 1.0.0
+    summary: Base project setup with vibe coding infrastructure
+
+  - version: 5
     date: 2025-12-28
     commit: dc4d36f
     subsystems:
@@ -11,7 +21,7 @@ versions:
       server: 1.0.0
       shared: 1.0.0
       ReplicatedFirst: 1.0.0
-    summary: Base project setup with vibe coding infrastructure
+    summary: Added pre-commit hook and YAML log
 
   - version: 4
     date: 2025-12-28
