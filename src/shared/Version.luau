@@ -1,7 +1,7 @@
 local Version = {
-	client = "1.0.0",
-	server = "1.0.0",
-	shared = "1.0.0",
+	client = "1.1.0",
+	server = "1.1.0",
+	shared = "1.1.0",
 	ReplicatedFirst = "1.0.0",
 }
 
