@@ -3,9 +3,17 @@
 	"lint": {
 		"*": true
 	},
+	"globals": [
+		"game",
+		"workspace",
+		"script"
+	],
 	"aliases": {
 		"shared": "src/shared",
 		"server": "src/server",
-		"client": "src/client"
+		"client": "src/client",
+		"ServerStorage": "src/ServerStorage",
+		"ReplicatedFirst": "src/ReplicatedFirst",
+		"Packages": "Packages"
 	}
 }

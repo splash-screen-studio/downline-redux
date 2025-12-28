@@ -38,11 +38,21 @@ Roblox game built with Rojo. Luau codebase synced from filesystem to Studio.
 
 ```
 src/
+  ReplicatedFirst/ # Loading screens, early client init (runs first)
   client/          # Client-side scripts (StarterPlayerScripts)
   server/          # Server-side scripts (ServerScriptService)
   shared/          # Shared modules (ReplicatedStorage)
+  ServerStorage/   # Server-only modules/assets
+Packages/          # Wally dependencies (gitignored)
 tests/             # Lune tests
+.github/workflows/ # CI (selene, stylua, lune)
 ```
+
+## Packages
+
+Available via `require(game.ReplicatedStorage.Packages.X)`:
+- **Promise** - Async without callback hell
+- **Signal** - Custom events
 
 ## Versioning
 
