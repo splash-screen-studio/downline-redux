@@ -1,10 +1,9 @@
 #!/bin/bash
-# Pre-commit hook: validate PUBLISH_LOG.yml and check publish freshness
+# Pre-commit hook: validate PUBLISH_LOG.yml matches latest Roblox publish
 
 set -e
 
 LOG_FILE="PUBLISH_LOG.yml"
-STALE_THRESHOLD_MINUTES=30
 
 # Load environment
 if [ -f ".env" ]; then
@@ -22,59 +21,50 @@ if ! python3 -c "import yaml; yaml.safe_load(open('$LOG_FILE'))" 2>/dev/null; th
     exit 1
 fi
 
-# Check publish freshness via rbxcloud
+# Check that latest publish is logged via rbxcloud
 if [ -n "$ROBLOX_API_KEY" ] && [ -n "$ROBLOX_EXPERIENCE_ID" ] && [ -n "$ROBLOX_PLACE_ID" ]; then
     PLACE_INFO=$(rbxcloud place get -a "$ROBLOX_API_KEY" -u "$ROBLOX_EXPERIENCE_ID" -p "$ROBLOX_PLACE_ID" 2>/dev/null || echo "")
 
     if [ -n "$PLACE_INFO" ]; then
         python3 << EOF
 import json
-import sys
-from datetime import datetime, timezone
-
-place_info = json.loads('''$PLACE_INFO''')
-update_time_str = place_info.get("updateTime", "")
-
-if update_time_str:
-    # Parse ISO timestamp
-    update_time = datetime.fromisoformat(update_time_str.replace("Z", "+00:00"))
-    now = datetime.now(timezone.utc)
-    age_minutes = (now - update_time).total_seconds() / 60
-
-    if age_minutes > $STALE_THRESHOLD_MINUTES:
-        print(f"")
-        print(f"⚠️  STALE PUBLISH DETECTED")
-        print(f"   Last publish: {int(age_minutes)} minutes ago")
-        print(f"   Threshold: $STALE_THRESHOLD_MINUTES minutes")
-        print(f"")
-        print(f"   Please publish from Studio: File → Publish to Roblox")
-        print(f"")
-        sys.exit(1)
-    else:
-        print(f"✓ Publish fresh ({int(age_minutes)} min ago)")
-EOF
-    fi
-fi
-
-# Validate required fields in latest entry
-python3 << 'EOF'
 import yaml
 import sys
+
+place_info = json.loads('''$PLACE_INFO''')
+roblox_update_time = place_info.get("updateTime", "")
 
 with open("PUBLISH_LOG.yml") as f:
     data = yaml.safe_load(f)
 
-if not data or "versions" not in data or not data["versions"]:
-    print("Error: PUBLISH_LOG.yml must have at least one version entry")
+if not data or "publishes" not in data or not data["publishes"]:
+    print("Error: PUBLISH_LOG.yml must have at least one publish entry")
     sys.exit(1)
 
-latest = data["versions"][0]
-required = ["version", "date", "commit", "subsystems", "summary"]
+latest = data["publishes"][0]
+logged_update_time = latest.get("updateTime", "")
+
+if roblox_update_time != logged_update_time:
+    print(f"")
+    print(f"⚠️  PUBLISH NOT LOGGED")
+    print(f"   Roblox updateTime: {roblox_update_time}")
+    print(f"   Logged updateTime: {logged_update_time}")
+    print(f"")
+    print(f"   Add new entry to PUBLISH_LOG.yml with updateTime from Roblox")
+    print(f"")
+    sys.exit(1)
+
+# Validate required fields
+required = ["updateTime", "commit", "subsystems", "summary"]
 missing = [f for f in required if f not in latest]
 
 if missing:
-    print(f"Error: Latest version entry missing fields: {missing}")
+    print(f"Error: Latest publish entry missing fields: {missing}")
     sys.exit(1)
 
-print(f"✓ PUBLISH_LOG.yml valid (latest: v{latest['version']})")
+print(f"✓ PUBLISH_LOG.yml matches Roblox ({logged_update_time[:19]})")
 EOF
+    fi
+else
+    echo "⚠ Skipping Roblox check (missing .env credentials)"
+fi

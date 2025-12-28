@@ -1,10 +1,10 @@
-# Publish Log - Track Roblox versions and git commits
+# Publish Log - Track Roblox publishes and git commits
 # After publishing from Studio, add entry here and commit
+# updateTime from rbxcloud identifies each publish
 
-versions:
-  - version: 6
+publishes:
+  - updateTime: "2025-12-28T13:02:18.099074700Z"
     tag: base
-    date: 2025-12-28
     commit: dc4fdf1
     subsystems:
       client: 1.0.0
@@ -12,22 +12,3 @@ versions:
       shared: 1.0.0
       ReplicatedFirst: 1.0.0
     summary: Base project setup with vibe coding infrastructure
-
-  - version: 5
-    date: 2025-12-28
-    commit: dc4d36f
-    subsystems:
-      client: 1.0.0
-      server: 1.0.0
-      shared: 1.0.0
-      ReplicatedFirst: 1.0.0
-    summary: Added pre-commit hook and YAML log
-
-  - version: 4
-    date: 2025-12-28
-    commit: 08b0b47
-    subsystems:
-      client: 1.0.0
-      server: 1.0.0
-      shared: 1.0.0
-    summary: Initial publish with versioning system
