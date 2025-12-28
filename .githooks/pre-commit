@@ -1,0 +1,38 @@
+#!/bin/bash
+# Pre-commit hook: validate PUBLISH_LOG.yml
+
+LOG_FILE="PUBLISH_LOG.yml"
+
+if [ ! -f "$LOG_FILE" ]; then
+    echo "Error: $LOG_FILE not found"
+    exit 1
+fi
+
+# Check YAML syntax
+if ! python3 -c "import yaml; yaml.safe_load(open('$LOG_FILE'))" 2>/dev/null; then
+    echo "Error: $LOG_FILE has invalid YAML syntax"
+    exit 1
+fi
+
+# Validate required fields in latest entry
+python3 << 'EOF'
+import yaml
+import sys
+
+with open("PUBLISH_LOG.yml") as f:
+    data = yaml.safe_load(f)
+
+if not data or "versions" not in data or not data["versions"]:
+    print("Error: PUBLISH_LOG.yml must have at least one version entry")
+    sys.exit(1)
+
+latest = data["versions"][0]
+required = ["version", "date", "commit", "subsystems", "summary"]
+missing = [f for f in required if f not in latest]
+
+if missing:
+    print(f"Error: Latest version entry missing fields: {missing}")
+    sys.exit(1)
+
+print(f"PUBLISH_LOG.yml valid (latest: v{latest['version']})")
+EOF

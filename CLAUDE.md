@@ -21,6 +21,7 @@ Roblox game built with Rojo. Luau codebase synced from filesystem to Studio.
 
 ### Pipeline
 - **Wally** - Package dependencies.
+- **rbxcloud** - Query place info (read-only). Cannot publish - use Studio for that.
 
 ## MCP Usage Rules
 
@@ -61,11 +62,13 @@ Available via `require(game.ReplicatedStorage.Packages.X)`:
 
 Subsystems are versioned independently in `src/shared/Version.luau`. Bump version when making changes to a subsystem.
 
-On publish, update `PUBLISH_LOG.md` with:
+On publish, update `PUBLISH_LOG.yml` with:
 - Roblox version number
 - Commit message
 - Subsystem versions
 - Summary of changes
+
+Pre-commit hook validates PUBLISH_LOG.yml syntax and required fields.
 
 ## Commands
 
@@ -85,6 +88,8 @@ lune run tests/Version.spec.luau  # Run tests
 1. Code syncs live to Studio via `rojo serve`
 2. World building via MCP or Studio
 3. Publish from Studio: **File → Publish to Roblox**
-4. Update `PUBLISH_LOG.md` with version number
+4. Update `PUBLISH_LOG.yml` with version number
 
 This captures everything: code + world state (parts, terrain, lighting).
+
+**Why not rbxcloud for publishing?** rbxcloud publishes a `.rbxl` file built from filesystem only. It does NOT capture world state (parts, terrain, lighting) created via MCP or Studio. Only Studio publish gets both code + world.
