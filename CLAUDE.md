@@ -4,6 +4,9 @@
 
 Roblox game built with Rojo. Luau codebase synced from filesystem to Studio.
 
+**Experience ID**: 9452966121
+**Place ID**: 95040662459276
+
 ## Dev Tool Roles
 
 ### Source of Truth (Code)
