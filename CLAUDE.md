@@ -59,16 +59,25 @@ On publish, update `PUBLISH_LOG.md` with:
 
 ```bash
 # Development
-rojo serve                        # Sync to Studio
+rojo serve                        # Sync to Studio (preferred)
 
 # Quality
 selene src/                       # Lint
 stylua src/                       # Format
 stylua --check src/               # Check formatting
 lune run tests/Version.spec.luau  # Run tests
+```
 
-# Build & Publish
-rojo build -o game.rbxl           # Build place file
+## Publishing
+
+**With rojo serve (preferred):**
+1. Code syncs live to Studio via rojo serve
+2. Publish from Studio: File → Publish to Roblox
+3. Update `PUBLISH_LOG.md` with version number
+
+**With rojo build (CI/headless):**
+```bash
+rojo build -o game.rbxl
 source .env && rbxcloud experience publish \
   -f game.rbxl \
   -i "$ROBLOX_PLACE_ID" \
@@ -76,6 +85,8 @@ source .env && rbxcloud experience publish \
   -t published \
   -a "$ROBLOX_API_KEY"
 ```
+
+Note: rojo build and rojo serve cannot run simultaneously.
 
 ## Environment Variables
 
