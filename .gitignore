@@ -12,3 +12,17 @@ profile.svg
 
 # Time trace
 trace.json
+
+# Environment variables (secrets)
+.env
+.env.*
+
+# Generated files
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+
+# Wally packages
+Packages/
+wally.lock
