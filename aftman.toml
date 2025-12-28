@@ -4,3 +4,4 @@ wally = "UpliftGames/wally@0.3.2"
 selene = "Kampfkarren/selene@0.28.0"
 stylua = "JohnnyMorganz/StyLua@2.0.2"
 lune = "lune-org/lune@0.9.4"
+# rbxcloud available globally via cargo if needed for Open Cloud APIs

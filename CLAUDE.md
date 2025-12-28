@@ -18,7 +18,6 @@ Roblox game built with Rojo. Luau codebase synced from filesystem to Studio.
 
 ### Pipeline
 - **Wally** - Package dependencies.
-- **rbxcloud** - Publish to Roblox.
 
 ## MCP Usage Rules
 
@@ -70,27 +69,9 @@ lune run tests/Version.spec.luau  # Run tests
 
 ## Publishing
 
-**With rojo serve (preferred):**
-1. Code syncs live to Studio via rojo serve
-2. Publish from Studio: File → Publish to Roblox
-3. Update `PUBLISH_LOG.md` with version number
+1. Code syncs live to Studio via `rojo serve`
+2. World building via MCP or Studio
+3. Publish from Studio: **File → Publish to Roblox**
+4. Update `PUBLISH_LOG.md` with version number
 
-**With rojo build (CI/headless):**
-```bash
-rojo build -o game.rbxl
-source .env && rbxcloud experience publish \
-  -f game.rbxl \
-  -i "$ROBLOX_PLACE_ID" \
-  -u "$ROBLOX_EXPERIENCE_ID" \
-  -t published \
-  -a "$ROBLOX_API_KEY"
-```
-
-Note: rojo build and rojo serve cannot run simultaneously.
-
-## Environment Variables
-
-Stored in `.env` (gitignored):
-- `ROBLOX_EXPERIENCE_ID` - Universe ID
-- `ROBLOX_PLACE_ID` - Place ID
-- `ROBLOX_API_KEY` - Open Cloud API key
+This captures everything: code + world state (parts, terrain, lighting).
